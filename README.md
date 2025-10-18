@@ -1,9 +1,5 @@
 # 🛰️ AstraRisk - Satellite Risk Assessment Platform
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
-![Status](https://img.shields.io/badge/status-production-green.svg)
-
 **AstraRisk** is a comprehensive risk assessment and insurance pricing platform for Low Earth Orbit (LEO) satellites. Built for insurance companies, underwriters, and satellite operators, it provides data-driven risk scores and premium calculations based on collision probability, space weather exposure, and operational reliability.
 
 ---
