@@ -1,0 +1,77 @@
+{
+  "variables": [
+    "collision_score",
+    "environment_score",
+    "bors_score",
+    "total_risk_score",
+    "AGE_YEARS",
+    "ALTITUDE_MEAN_KM"
+  ],
+  "matrix": [
+    [
+      1.0,
+      -0.424,
+      0.117,
+      0.948,
+      0.105,
+      0.47
+    ],
+    [
+      -0.424,
+      1.0,
+      -0.343,
+      -0.356,
+      -0.289,
+      -0.802
+    ],
+    [
+      0.117,
+      -0.343,
+      1.0,
+      0.389,
+      0.603,
+      0.01
+    ],
+    [
+      0.948,
+      -0.356,
+      0.389,
+      1.0,
+      0.255,
+      0.325
+    ],
+    [
+      0.105,
+      -0.289,
+      0.603,
+      0.255,
+      1.0,
+      0.053
+    ],
+    [
+      0.47,
+      -0.802,
+      0.01,
+      0.325,
+      0.053,
+      1.0
+    ]
+  ],
+  "key_insights": [
+    {
+      "metric": "Collision vs Environment",
+      "correlation": -0.424,
+      "interpretation": "Moderately correlated"
+    },
+    {
+      "metric": "Collision vs BORS",
+      "correlation": 0.117,
+      "interpretation": "Weak positive correlation (older satellites in more crowded orbits)"
+    },
+    {
+      "metric": "Age vs BORS",
+      "correlation": 0.603,
+      "interpretation": "Strong positive correlation (as expected, age drives BORS)"
+    }
+  ]
+}

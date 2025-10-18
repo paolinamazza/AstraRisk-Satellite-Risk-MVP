@@ -1,0 +1,100 @@
+{
+  "axes": {
+    "x": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "y": [
+      "Low",
+      "Medium",
+      "High"
+    ]
+  },
+  "cells": [
+    {
+      "collision_bin": "Low",
+      "bors_bin": "Low",
+      "count": 0,
+      "avg_total_risk": 0,
+      "total_insured_value": 0,
+      "risk_level": "low"
+    },
+    {
+      "collision_bin": "Low",
+      "bors_bin": "Medium",
+      "count": 38,
+      "avg_total_risk": 40.3,
+      "total_insured_value": 152000000,
+      "risk_level": "medium"
+    },
+    {
+      "collision_bin": "Low",
+      "bors_bin": "High",
+      "count": 169,
+      "avg_total_risk": 43.0,
+      "total_insured_value": 2654532000,
+      "risk_level": "medium"
+    },
+    {
+      "collision_bin": "Medium",
+      "bors_bin": "Low",
+      "count": 0,
+      "avg_total_risk": 0,
+      "total_insured_value": 0,
+      "risk_level": "low"
+    },
+    {
+      "collision_bin": "Medium",
+      "bors_bin": "Medium",
+      "count": 8256,
+      "avg_total_risk": 54.8,
+      "total_insured_value": 33080194500,
+      "risk_level": "high"
+    },
+    {
+      "collision_bin": "Medium",
+      "bors_bin": "High",
+      "count": 4387,
+      "avg_total_risk": 58.0,
+      "total_insured_value": 61632010500,
+      "risk_level": "high"
+    },
+    {
+      "collision_bin": "High",
+      "bors_bin": "Low",
+      "count": 4,
+      "avg_total_risk": 59.8,
+      "total_insured_value": 16000000,
+      "risk_level": "high"
+    },
+    {
+      "collision_bin": "High",
+      "bors_bin": "Medium",
+      "count": 3076,
+      "avg_total_risk": 64.9,
+      "total_insured_value": 12206065500,
+      "risk_level": "high"
+    },
+    {
+      "collision_bin": "High",
+      "bors_bin": "High",
+      "count": 2682,
+      "avg_total_risk": 71.2,
+      "total_insured_value": 43495461000,
+      "risk_level": "critical"
+    }
+  ],
+  "insights": {
+    "critical_zone_count": 2682,
+    "safe_zone_count": 0,
+    "highest_concentration": {
+      "collision_bin": "Medium",
+      "bors_bin": "Medium",
+      "count": 8256,
+      "avg_total_risk": 54.8,
+      "total_insured_value": 33080194500,
+      "risk_level": "high"
+    }
+  }
+}

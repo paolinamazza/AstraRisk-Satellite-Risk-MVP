@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(curl -s http://localhost:8000/risk_dashboard.html)",
+      "Bash(curl:*)",
+      "Bash(chmod:*)",
+      "Bash(open http://localhost:8000/risk_dashboard.html)",
+      "Read(//var/folders/bt/q7p67fmn6n18tt9zx5924xs80000gn/T/TemporaryItems/NSIRD_screencaptureui_vskuRw/**)",
+      "Bash(open http://localhost:8000/test_dashboard.html)",
+      "Bash(open http://localhost:5555/)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

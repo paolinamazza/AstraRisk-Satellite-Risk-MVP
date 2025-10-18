@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "generated_at": "2025-10-14T16:15:35.837406",
+    "total_satellites": 18612,
+    "analysis_date": "2025-10-14"
+  },
+  "risk_scores": {
+    "total_risk": {
+      "mean": 59.4,
+      "median": 57.4,
+      "std": 6.8,
+      "min": 38.0,
+      "max": 79.6,
+      "percentile_25": 55.6,
+      "percentile_75": 62.5
+    },
+    "collision": {
+      "mean": 56.9,
+      "median": 54.0
+    },
+    "environment": {
+      "mean": 64.8,
+      "median": 65.8
+    },
+    "bors": {
+      "mean": 57.4,
+      "median": 54.9
+    }
+  },
+  "financial": {
+    "total_insured_value": 153236263500,
+    "total_annual_premium": 9789965968,
+    "total_expected_loss": 6316107184,
+    "average_rate_on_line": 5.93,
+    "loss_ratio_pct": 64.5
+  },
+  "risk_concentration": {
+    "top_10_pct_value": 28669757000,
+    "top_10_pct_share": 18.7
+  },
+  "data_quality": {
+    "mean_quality_score": 62.5,
+    "high_quality_count": 45,
+    "high_quality_pct": 0.2
+  }
+}

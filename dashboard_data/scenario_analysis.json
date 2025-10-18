@@ -1,0 +1,109 @@
+{
+  "scenarios": [
+    {
+      "scenario": "Baseline",
+      "description": "Current weights",
+      "weights": {
+        "collision": 0.4,
+        "environment": 0.3,
+        "bors": 0.3
+      },
+      "results": {
+        "mean_total_risk": 59.4,
+        "median_total_risk": 57.4,
+        "total_premium": 9787784984,
+        "avg_rate_on_line": 6.39,
+        "high_risk_count": 1873,
+        "critical_risk_count": 0
+      },
+      "comparison_to_baseline": {
+        "risk_change": -0.0,
+        "premium_change_pct": -0.0
+      }
+    },
+    {
+      "scenario": "Mega-Constellations Era",
+      "description": "Higher collision focus",
+      "weights": {
+        "collision": 0.6,
+        "environment": 0.2,
+        "bors": 0.2
+      },
+      "results": {
+        "mean_total_risk": 58.6,
+        "median_total_risk": 55.4,
+        "total_premium": 10034224398,
+        "avg_rate_on_line": 6.55,
+        "high_risk_count": 3352,
+        "critical_risk_count": 37
+      },
+      "comparison_to_baseline": {
+        "risk_change": -0.8,
+        "premium_change_pct": 2.5
+      }
+    },
+    {
+      "scenario": "Solar Maximum Period",
+      "description": "Higher environment focus",
+      "weights": {
+        "collision": 0.3,
+        "environment": 0.5,
+        "bors": 0.2
+      },
+      "results": {
+        "mean_total_risk": 61.0,
+        "median_total_risk": 60.0,
+        "total_premium": 9127388710,
+        "avg_rate_on_line": 5.96,
+        "high_risk_count": 996,
+        "critical_risk_count": 0
+      },
+      "comparison_to_baseline": {
+        "risk_change": 1.5,
+        "premium_change_pct": -6.8
+      }
+    },
+    {
+      "scenario": "NewSpace Focus",
+      "description": "Higher operations/heritage focus",
+      "weights": {
+        "collision": 0.3,
+        "environment": 0.2,
+        "bors": 0.5
+      },
+      "results": {
+        "mean_total_risk": 58.7,
+        "median_total_risk": 58.7,
+        "total_premium": 9429919198,
+        "avg_rate_on_line": 6.15,
+        "high_risk_count": 1490,
+        "critical_risk_count": 0
+      },
+      "comparison_to_baseline": {
+        "risk_change": -0.7,
+        "premium_change_pct": -3.7
+      }
+    },
+    {
+      "scenario": "Equal Weights",
+      "description": "All drivers equal",
+      "weights": {
+        "collision": 0.333,
+        "environment": 0.333,
+        "bors": 0.334
+      },
+      "results": {
+        "mean_total_risk": 59.7,
+        "median_total_risk": 58.7,
+        "total_premium": 9432885553,
+        "avg_rate_on_line": 6.16,
+        "high_risk_count": 1376,
+        "critical_risk_count": 0
+      },
+      "comparison_to_baseline": {
+        "risk_change": 0.3,
+        "premium_change_pct": -3.6
+      }
+    }
+  ]
+}

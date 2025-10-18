@@ -1,0 +1,86 @@
+{
+  "risk_categories": [
+    {
+      "category": "Low",
+      "count": 0,
+      "percentage": 0.0,
+      "total_insured_value": 0,
+      "avg_risk_score": 0
+    },
+    {
+      "category": "Medium-Low",
+      "count": 219,
+      "percentage": 1.2,
+      "total_insured_value": 2894532000,
+      "avg_risk_score": 42.9
+    },
+    {
+      "category": "Medium-High",
+      "count": 16514,
+      "percentage": 88.7,
+      "total_insured_value": 121463777500,
+      "avg_risk_score": 58.1
+    },
+    {
+      "category": "High",
+      "count": 1879,
+      "percentage": 10.1,
+      "total_insured_value": 28877954000,
+      "avg_risk_score": 73.5
+    },
+    {
+      "category": "Critical",
+      "count": 0,
+      "percentage": 0.0,
+      "total_insured_value": 0,
+      "avg_risk_score": 0
+    }
+  ],
+  "dominant_drivers": [
+    {
+      "driver": "Collision",
+      "count": 10603,
+      "percentage": 57.0,
+      "avg_contribution": 42.3
+    },
+    {
+      "driver": "Environment",
+      "count": 6983,
+      "percentage": 37.5,
+      "avg_contribution": 36.9
+    },
+    {
+      "driver": "BORS",
+      "count": 1026,
+      "percentage": 5.5,
+      "avg_contribution": 37.6
+    }
+  ],
+  "score_bins": [
+    {
+      "bin": "0-20",
+      "count": 0,
+      "percentage": 0.0
+    },
+    {
+      "bin": "20-40",
+      "count": 22,
+      "percentage": 0.1
+    },
+    {
+      "bin": "40-60",
+      "count": 12572,
+      "percentage": 67.5
+    },
+    {
+      "bin": "60-80",
+      "count": 6018,
+      "percentage": 32.3
+    },
+    {
+      "bin": "80-100",
+      "count": 0,
+      "percentage": 0.0
+    }
+  ]
+}

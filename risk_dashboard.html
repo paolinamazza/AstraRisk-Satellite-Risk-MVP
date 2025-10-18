@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Risk Assessment Dashboard | LEO Insurance Analytics</title>
+
+    <!-- React & Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Recharts for visualizations -->
+    <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 32px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .stat-change {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        /* Header actions */
+        .header-actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+        .btn { padding: 10px 14px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.6); }
+        .help-panel { margin-top: 16px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 12px; padding: 12px 14px; color: #f8fafc; }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 0 48px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 20px 32px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #64748b;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: #3b82f6;
+        }
+
+        .nav-tab.active {
+            color: #3b82f6;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3b82f6;
+        }
+
+        .content-area {
+            padding: 48px;
+        }
+
+        .section-header {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .metric-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .metric-subtitle {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+        }
+
+        .chart-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        .data-table {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-header {
+            background: #f8fafc;
+            padding: 20px 24px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-low { background: #dcfce7; color: #166534; }
+        .risk-medium-low { background: #fef3c7; color: #92400e; }
+        .risk-medium-high { background: #fed7aa; color: #9a3412; }
+        .risk-high { background: #fecaca; color: #991b1b; }
+        .risk-critical { background: #fca5a5; color: #7f1d1d; }
+
+        .risk-score-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .risk-score-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .filter-controls {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .filter-input, .filter-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .scenario-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .scenario-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-4px);
+        }
+
+        .scenario-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .scenario-description {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+        }
+
+        .heatmap-count {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .heatmap-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                margin: 10px;
+            }
+            .dashboard-header {
+                padding: 24px;
+            }
+            .dashboard-title {
+                font-size: 28px;
+            }
+            .content-area {
+                padding: 24px;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles for PDF export */
+        @media print {
+            body { background: white !important; }
+            .dashboard-container { box-shadow: none !important; }
+            .dashboard-header { background: #ffffff !important; color: #111827 !important; }
+            .nav-tabs, .chat-toggle, .chat-panel { display: none !important; }
+            .content-area { padding: 20px !important; }
+            .chart-container { page-break-inside: avoid; }
+        }
+
+        /* Chat widget */
+        .chat-toggle {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 14px 18px;
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.4);
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .chat-panel {
+            position: fixed;
+            right: 24px;
+            bottom: 90px;
+            width: 380px;
+            max-height: 520px;
+            display: none;
+            flex-direction: column;
+            background: rgba(255,255,255,0.98);
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 48px rgba(0,0,0,0.25);
+            z-index: 1000;
+        }
+
+        .chat-header { 
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 14px; background: #0ea5e9; color: white; font-weight: 800;
+        }
+        .chat-body { padding: 12px; overflow-y: auto; height: 360px; background: #f8fafc; }
+        .chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #e5e7eb; background: white; }
+        .chat-input input { flex: 1; padding: 10px 12px; border-radius: 10px; border: 2px solid #e2e8f0; }
+        .chat-input button { padding: 10px 14px; border-radius: 10px; border: none; background: #0ea5e9; color: white; font-weight: 700; cursor: pointer; }
+        .msg { margin: 8px 0; display: flex; }
+        .msg.user { justify-content: flex-end; }
+        .bubble { max-width: 80%; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.3; }
+        .user .bubble { background: #2563eb; color: white; border-bottom-right-radius: 4px; }
+        .assistant .bubble { background: white; color: #111827; border: 1px solid #e5e7eb; border-bottom-left-radius: 4px; }
+        .sources { font-size: 12px; color: #6b7280; margin-top: 6px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Chat widget -->
+    <div id="chatPanel" class="chat-panel">
+        <div class="chat-header">
+            <span>🤖 Ask the Project AI</span>
+            <button onclick="toggleChat(false)" style="background: transparent; border: none; color: white; font-weight: 800; cursor: pointer;">✕</button>
+        </div>
+        <div id="chatBody" class="chat-body"></div>
+        <div class="chat-input">
+            <input id="chatInput" type="text" placeholder="Ask about files, data, or logic..." onkeydown="if(event.key==='Enter'){sendChat()}" />
+            <button onclick="sendChat()">Send</button>
+        </div>
+    </div>
+    <button class="chat-toggle" onclick="toggleChat()">💬 Chat</button>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } = Recharts;
+
+        const COLORS = {
+            primary: '#3b82f6',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            info: '#06b6d4',
+            purple: '#8b5cf6'
+        };
+
+        function Dashboard() {
+            const [activeTab, setActiveTab] = useState('summary');
+            const [data, setData] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [filters, setFilters] = useState({
+                riskCategory: 'all',
+                searchTerm: ''
+            });
+
+            useEffect(() => {
+                async function loadData() {
+                    try {
+                        const [fleet, risk, top, scenario, proj, heat, own] = await Promise.all([
+                            fetch('dashboard_data/fleet_summary.json').then(r => r.json()),
+                            fetch('dashboard_data/risk_distribution.json').then(r => r.json()),
+                            fetch('dashboard_data/top_risks.json').then(r => r.json()),
+                            fetch('dashboard_data/scenario_analysis.json').then(r => r.json()),
+                            fetch('dashboard_data/time_projections.json').then(r => r.json()),
+                            fetch('dashboard_data/heatmap_data.json').then(r => r.json()),
+                            fetch('dashboard_data/owner_analysis.json').then(r => r.json())
+                        ]);
+
+                        setData({
+                            fleetSummary: fleet,
+                            riskDistribution: risk,
+                            topRisks: top,
+                            scenarios: scenario,
+                            projections: proj,
+                            heatmap: heat,
+                            owners: own
+                        });
+                        setLoading(false);
+                    } catch (error) {
+                        console.error('Error loading data:', error);
+                        alert('Error loading dashboard data. Make sure dashboard_data folder exists!');
+                        setLoading(false);
+                    }
+                }
+                loadData();
+            }, []);
+
+            if (loading || !data) {
+                return (
+                    <div className="loading-container">
+                        <div className="spinner"></div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="dashboard-container">
+                    <DashboardHeader data={data.fleetSummary} />
+                    <NavigationTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <div className="content-area">
+                        {activeTab === 'summary' && <ExecutiveSummary data={data} />}
+                        {activeTab === 'explorer' && <RiskExplorer data={data} filters={filters} setFilters={setFilters} />}
+                        {activeTab === 'scenarios' && <ScenarioAnalysis data={data.scenarios} />}
+                        {activeTab === 'projections' && <TimeProjections data={data.projections} />}
+                        {activeTab === 'heatmap' && <RiskHeatmap data={data.heatmap} />}
+                        {activeTab === 'portfolio' && <PortfolioAnalysis data={data.owners} />}
+                    </div>
+                </div>
+            );
+        }
+
+        function DashboardHeader({ data }) {
+            const { metadata, risk_scores, financial } = data;
+            const [showHelp, setShowHelp] = useState(false);
+
+            return (
+                <div className="dashboard-header">
+                    <div className="header-content">
+                        <h1 className="dashboard-title">LEO Satellite Risk Assessment</h1>
+                        <p className="dashboard-subtitle">
+                            Comprehensive Insurance Analytics for {metadata.total_satellites.toLocaleString()} Low Earth Orbit Satellites
+                        </p>
+
+                        <div className="header-actions">
+                            <button className="btn btn-outline" onClick={() => setShowHelp(!showHelp)}>Help & Chat</button>
+                            <button className="btn btn-primary" onClick={downloadPDF}>Download PDF Report</button>
+                        </div>
+
+                        {showHelp && (
+                            <div className="help-panel">
+                                <div style={{ fontWeight: 800, marginBottom: '6px' }}>Quick Help</div>
+                                <div>- Click the 💬 Chat button (bottom-right) to ask questions about files, data, or logic. The AI reads local files (limited excerpts) and cites sources.</div>
+                                <div>- Use the tabs to explore Summary, Explorer, Scenarios, Projections, Heatmap, and Portfolio.</div>
+                                <div>- Download PDF Report exports a print-friendly version of the current view. Ask me if you want a multi-section consolidated report instead.</div>
+                            </div>
+                        )}
+
+                        <div className="header-stats">
+                            <div className="stat-card">
+                                <div className="stat-label">Total Insured Value</div>
+                                <div className="stat-value">€{(financial.total_insured_value / 1e9).toFixed(1)}B</div>
+                                <div className="stat-change">Across {metadata.total_satellites.toLocaleString()} satellites</div>
+                            </div>
+
+                            <div className="stat-card">
+                                <div className="stat-label">Annual Premiums</div>
+                                <div className="stat-value">€{(financial.total_annual_premium / 1e6).toFixed(0)}M</div>
+                                <div className="stat-change">Avg ROL: {financial.average_rate_on_line}%</div>
+                            </div>
+
+                            <div className="stat-card">
+                                <div className="stat-label">Mean Risk Score</div>
+                                <div className="stat-value">{risk_scores.total_risk.mean}</div>
+                                <div className="stat-change">Range: {risk_scores.total_risk.min} - {risk_scores.total_risk.max}</div>
+                            </div>
+
+                            <div className="stat-card">
+                                <div className="stat-label">Loss Ratio</div>
+                                <div className="stat-value">{financial.loss_ratio_pct}%</div>
+                                <div className="stat-change">Expected annual loss rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function NavigationTabs({ activeTab, setActiveTab }) {
+            const tabs = [
+                { id: 'summary', label: 'Executive Summary' },
+                { id: 'explorer', label: 'Risk Explorer' },
+                { id: 'scenarios', label: 'Scenario Analysis' },
+                { id: 'projections', label: 'Time Projections' },
+                { id: 'heatmap', label: 'Risk Heatmap' },
+                { id: 'portfolio', label: 'Portfolio Analysis' }
+            ];
+
+            return (
+                <div className="nav-tabs">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+            );
+        }
+
+        function ExecutiveSummary({ data }) {
+            const { fleetSummary, riskDistribution } = data;
+
+            const categoryData = riskDistribution.risk_categories.map(cat => ({
+                name: cat.category,
+                count: cat.count,
+                percentage: cat.percentage
+            }));
+
+            const driverData = riskDistribution.dominant_drivers.map(driver => ({
+                name: driver.driver,
+                count: driver.count,
+                percentage: driver.percentage
+            }));
+
+            return (
+                <div>
+                    <div className="section-header">
+                        <h2 className="section-title">Executive Summary</h2>
+                        <p className="section-description">
+                            Comprehensive overview of the LEO satellite insurance portfolio with key risk metrics.
+                        </p>
+                    </div>
+
+                    <div className="cards-grid">
+                        <div className="metric-card">
+                            <div className="metric-title">Collision Risk</div>
+                            <div className="metric-value">{fleetSummary.risk_scores.collision.mean}</div>
+                            <div className="metric-subtitle">Mean score across fleet</div>
+                            <div className="risk-score-bar">
+                                <div className="risk-score-fill" style={{
+                                    width: `${fleetSummary.risk_scores.collision.mean}%`,
+                                    background: getScoreColor(fleetSummary.risk_scores.collision.mean)
+                                }}></div>
+                            </div>
+                        </div>
+
+                        <div className="metric-card">
+                            <div className="metric-title">Environment Risk</div>
+                            <div className="metric-value">{fleetSummary.risk_scores.environment.mean}</div>
+                            <div className="metric-subtitle">Space weather exposure</div>
+                            <div className="risk-score-bar">
+                                <div className="risk-score-fill" style={{
+                                    width: `${fleetSummary.risk_scores.environment.mean}%`,
+                                    background: getScoreColor(fleetSummary.risk_scores.environment.mean)
+                                }}></div>
+                            </div>
+                        </div>
+
+                        <div className="metric-card">
+                            <div className="metric-title">BORS (Operations)</div>
+                            <div className="metric-value">{fleetSummary.risk_scores.bors.mean}</div>
+                            <div className="metric-subtitle">Age & heritage risk</div>
+                            <div className="risk-score-bar">
+                                <div className="risk-score-fill" style={{
+                                    width: `${fleetSummary.risk_scores.bors.mean}%`,
+                                    background: getScoreColor(fleetSummary.risk_scores.bors.mean)
+                                }}></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="chart-container">
+                        <h3 className="chart-title">Risk Category Distribution</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={categoryData}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="count" fill={COLORS.primary} radius={[8, 8, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                        <div className="chart-container">
+                            <h3 className="chart-title">Dominant Risk Drivers</h3>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <PieChart>
+                                    <Pie
+                                        data={driverData}
+                                        cx="50%"
+                                        cy="50%"
+                                        labelLine={false}
+                                        label={entry => `${entry.name}: ${entry.percentage}%`}
+                                        outerRadius={100}
+                                        dataKey="count"
+                                    >
+                                        {driverData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={[COLORS.danger, COLORS.warning, COLORS.info][index]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        <div className="chart-container">
+                            <h3 className="chart-title">Score Distribution</h3>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <BarChart data={riskDistribution.score_bins}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="bin" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Bar dataKey="count" fill={COLORS.purple} radius={[8, 8, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function RiskExplorer({ data, filters, setFilters }) {
+            const { topRisks } = data;
+
+            let filteredSatellites = topRisks.top_risks;
+
+            if (filters.riskCategory !== 'all') {
+                filteredSatellites = filteredSatellites.filter(sat => sat.risk_category === filters.riskCategory);
+            }
+
+            if (filters.searchTerm) {
+                filteredSatellites = filteredSatellites.filter(sat =>
+                    sat.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+                    sat.owner.toLowerCase().includes(filters.searchTerm.toLowerCase())
+                );
+            }
+
+            return (
+                <div>
+                    <div className="section-header">
+                        <h2 className="section-title">Risk Explorer</h2>
+                        <p className="section-description">
+                            Search and filter satellites by risk level and owner. Explore the top 50 highest risk assets.
+                        </p>
+                    </div>
+
+                    <div className="filter-controls">
+                        <div className="filter-group">
+                            <label className="filter-label">Search Satellite</label>
+                            <input
+                                type="text"
+                                className="filter-input"
+                                placeholder="Search by name or owner..."
+                                value={filters.searchTerm}
+                                onChange={(e) => setFilters({...filters, searchTerm: e.target.value})}
+                            />
+                        </div>
+
+                        <div className="filter-group">
+                            <label className="filter-label">Risk Category</label>
+                            <select
+                                className="filter-select"
+                                value={filters.riskCategory}
+                                onChange={(e) => setFilters({...filters, riskCategory: e.target.value})}
+                            >
+                                <option value="all">All Categories</option>
+                                <option value="Low">Low Risk</option>
+                                <option value="Medium-Low">Medium-Low Risk</option>
+                                <option value="Medium-High">Medium-High Risk</option>
+                                <option value="High">High Risk</option>
+                                <option value="Critical">Critical Risk</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="data-table">
+                        <div className="table-header">
+                            <h3 className="table-title">Showing {filteredSatellites.length} Satellites</h3>
+                        </div>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Satellite Name</th>
+                                        <th>Owner</th>
+                                        <th>Total Risk</th>
+                                        <th>Collision</th>
+                                        <th>Environment</th>
+                                        <th>BORS</th>
+                                        <th>Category</th>
+                                        <th>Premium (€)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredSatellites.map((sat) => (
+                                        <tr key={sat.norad_id}>
+                                            <td><strong>{sat.rank}</strong></td>
+                                            <td>{sat.name}</td>
+                                            <td>{sat.owner}</td>
+                                            <td style={{ color: getScoreColor(sat.total_risk_score), fontWeight: 'bold' }}>
+                                                {sat.total_risk_score}
+                                            </td>
+                                            <td>{sat.collision_score}</td>
+                                            <td>{sat.environment_score}</td>
+                                            <td>{sat.bors_score}</td>
+                                            <td>
+                                                <span className={`risk-badge risk-${sat.risk_category.toLowerCase().replace(' ', '-')}`}>
+                                                    {sat.risk_category}
+                                                </span>
+                                            </td>
+                                            <td>€{(sat.premium_annual / 1000).toFixed(0)}K</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ScenarioAnalysis({ data }) {
+            const scenarios = data.scenarios;
+
+            return (
+                <div>
+                    <div className="section-header">
+                        <h2 className="section-title">Scenario Analysis</h2>
+                        <p className="section-description">
+                            Explore what-if scenarios with different risk driver weightings.
+                        </p>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
+                        {scenarios.map((scenario, idx) => (
+                            <div key={idx} className="scenario-card">
+                                <div className="scenario-name">{scenario.scenario}</div>
+                                <div className="scenario-description">{scenario.description}</div>
+
+                                <div style={{ margin: '16px 0', padding: '12px', background: '#f8fafc', borderRadius: '8px', fontSize: '13px' }}>
+                                    <strong>Weights:</strong> Collision {(scenario.weights.collision * 100).toFixed(0)}% ·
+                                    Environment {(scenario.weights.environment * 100).toFixed(0)}% ·
+                                    BORS {(scenario.weights.bors * 100).toFixed(0)}%
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                                    <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '8px' }}>
+                                        <div style={{ fontSize: '12px', color: '#64748b' }}>Mean Risk</div>
+                                        <div style={{ fontSize: '20px', fontWeight: '700', color: getScoreColor(scenario.results.mean_total_risk) }}>
+                                            {scenario.results.mean_total_risk}
+                                        </div>
+                                    </div>
+                                    <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '8px' }}>
+                                        <div style={{ fontSize: '12px', color: '#64748b' }}>Premium</div>
+                                        <div style={{ fontSize: '20px', fontWeight: '700' }}>
+                                            €{(scenario.results.total_premium / 1e6).toFixed(0)}M
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {scenario.scenario !== 'Baseline' && (
+                                    <div style={{
+                                        marginTop: '16px',
+                                        padding: '12px',
+                                        background: scenario.comparison_to_baseline.risk_change > 0 ? '#fef3c7' : '#dcfce7',
+                                        borderRadius: '8px',
+                                        fontSize: '13px'
+                                    }}>
+                                        <strong>vs Baseline:</strong> Premium {scenario.comparison_to_baseline.premium_change_pct > 0 ? '+' : ''}
+                                        {scenario.comparison_to_baseline.premium_change_pct}%
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function TimeProjections({ data }) {
+            const [selectedSatellite, setSelectedSatellite] = useState(0);
+            const projections = data.projections;
+            const currentProjection = projections[selectedSatellite];
+            const timeSeriesData = currentProjection.years;
+
+            return (
+                <div>
+                    <div className="section-header">
+                        <h2 className="section-title">10-Year Risk Projections</h2>
+                        <p className="section-description">
+                            Forecast how satellite risk scores and premiums will evolve over the next decade.
+                        </p>
+                    </div>
+
+                    <div className="filter-controls">
+                        <div className="filter-group">
+                            <label className="filter-label">Select Satellite</label>
+                            <select
+                                className="filter-select"
+                                value={selectedSatellite}
+                                onChange={(e) => setSelectedSatellite(parseInt(e.target.value))}
+                            >
+                                {projections.map((proj, idx) => (
+                                    <option key={idx} value={idx}>
+                                        {proj.satellite.name} (Age: {proj.satellite.current_age}y)
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="cards-grid">
+                        <div className="metric-card">
+                            <div className="metric-title">Current Risk</div>
+                            <div className="metric-value" style={{ color: getScoreColor(timeSeriesData[0].total_risk_score) }}>
+                                {timeSeriesData[0].total_risk_score}
+                            </div>
+                            <div className="metric-subtitle">Today</div>
+                        </div>
+
+                        <div className="metric-card">
+                            <div className="metric-title">10-Year Risk</div>
+                            <div className="metric-value" style={{ color: getScoreColor(timeSeriesData[10].total_risk_score) }}>
+                                {timeSeriesData[10].total_risk_score}
+                            </div>
+                            <div className="metric-subtitle">
+                                {timeSeriesData[10].total_risk_score > timeSeriesData[0].total_risk_score ? '↑' : '↓'}
+                                {Math.abs(timeSeriesData[10].total_risk_score - timeSeriesData[0].total_risk_score).toFixed(1)} points
+                            </div>
+                        </div>
+
+                        <div className="metric-card">
+                            <div className="metric-title">Premium Growth</div>
+                            <div className="metric-value">
+                                {(((timeSeriesData[10].premium_annual / timeSeriesData[0].premium_annual) - 1) * 100).toFixed(0)}%
+                            </div>
+                            <div className="metric-subtitle">Over 10 years</div>
+                        </div>
+                    </div>
+
+                    <div className="chart-container">
+                        <h3 className="chart-title">Risk Score Evolution</h3>
+                        <ResponsiveContainer width="100%" height={400}>
+                            <LineChart data={timeSeriesData}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                <XAxis dataKey="year" label={{ value: 'Years Forward', position: 'insideBottom', offset: -5 }} />
+                                <YAxis domain={[0, 100]} />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="total_risk_score" stroke={COLORS.primary} strokeWidth={3} name="Total Risk" />
+                                <Line type="monotone" dataKey="collision_score" stroke={COLORS.danger} strokeWidth={2} name="Collision" />
+                                <Line type="monotone" dataKey="environment_score" stroke={COLORS.warning} strokeWidth={2} name="Environment" />
+                                <Line type="monotone" dataKey="bors_score" stroke={COLORS.info} strokeWidth={2} name="BORS" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            );
+        }
+
+        function RiskHeatmap({ data }) {
+            const collisionLevels = ['Low', 'Medium', 'High'];
+            const borsLevels = ['Low', 'Medium', 'High'];
+
+            const getCell = (collision, bors) => {
+                return data.cells.find(cell =>
+                    cell.collision_bin === collision && cell.bors_bin === bors
+                ) || { count: 0, avg_total_risk: 0, risk_level: 'low' };
+            };
+
+            const getRiskColor = (riskLevel) => {
+                const colors = { low: '#10b981', medium: '#f59e0b', high: '#f97316', critical: '#ef4444' };
+                return colors[riskLevel] || colors.low;
+            };
+
+            return (
+                <div>
+                    <div className="section-header">
+                        <h2 className="section-title">Multi-Risk Heatmap</h2>
+                        <p className="section-description">
+                            Visual distribution of satellites across collision and operational risk dimensions.
+                        </p>
+                    </div>
+
+                    <div className="chart-container">
+                        <h3 className="chart-title">Risk Distribution Grid</h3>
+                        <div style={{ padding: '20px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(3, 1fr)', gap: '12px' }}>
+                                <div></div>
+                                {borsLevels.map(level => (
+                                    <div key={level} style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '14px', color: '#64748b' }}>
+                                        BORS: {level}
+                                    </div>
+                                ))}
+
+                                {collisionLevels.map((collision) => (
+                                    <React.Fragment key={collision}>
+                                        <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#64748b', textAlign: 'right', paddingRight: '12px' }}>
+                                            Collision:<br/>{collision}
+                                        </div>
+                                        {borsLevels.map((bors) => {
+                                            const cell = getCell(collision, bors);
+                                            return (
+                                                <div
+                                                    key={`${collision}-${bors}`}
+                                                    className="heatmap-cell"
+                                                    style={{ background: getRiskColor(cell.risk_level), opacity: cell.count > 0 ? 0.85 : 0.3 }}
+                                                >
+                                                    <div className="heatmap-count">{cell.count}</div>
+                                                    <div className="heatmap-label">satellites</div>
+                                                    {cell.count > 0 && (
+                                                        <div style={{ fontSize: '12px', marginTop: '8px' }}>
+                                                            Risk: {cell.avg_total_risk}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function PortfolioAnalysis({ data }) {
+            const owners = data.owners;
+
+            return (
+                <div>
+                    <div className="section-header">
+                        <h2 className="section-title">Portfolio Analysis by Owner</h2>
+                        <p className="section-description">
+                            Risk assessment breakdown by satellite owner/operator.
+                        </p>
+                    </div>
+
+                    <div className="data-table">
+                        <div className="table-header">
+                            <h3 className="table-title">Top 20 Owners - Detailed Breakdown</h3>
+                        </div>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Owner</th>
+                                        <th>Satellites</th>
+                                        <th>Avg Risk</th>
+                                        <th>Collision</th>
+                                        <th>Environment</th>
+                                        <th>BORS</th>
+                                        <th>Insured Value</th>
+                                        <th>Premium</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {owners.map((owner, idx) => (
+                                        <tr key={idx}>
+                                            <td><strong>{owner.owner}</strong></td>
+                                            <td>{owner.satellite_count}</td>
+                                            <td style={{ color: getScoreColor(owner.avg_total_risk), fontWeight: 'bold' }}>
+                                                {owner.avg_total_risk}
+                                            </td>
+                                            <td>{owner.avg_collision}</td>
+                                            <td>{owner.avg_environment}</td>
+                                            <td>{owner.avg_bors}</td>
+                                            <td>€{(owner.total_insured_value / 1e6).toFixed(0)}M</td>
+                                            <td>€{(owner.total_annual_premium / 1e6).toFixed(1)}M</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function getScoreColor(score) {
+            if (score < 30) return COLORS.success;
+            if (score < 50) return COLORS.warning;
+            if (score < 70) return '#f97316';
+            if (score < 85) return COLORS.danger;
+            return '#dc2626';
+        }
+
+        ReactDOM.render(<Dashboard />, document.getElementById('root'));
+    </script>
+
+    <!-- Chat widget script (vanilla JS) -->
+    <script>
+        // Download PDF: use the browser's print dialog with print-friendly CSS
+        function downloadPDF() {
+            try {
+                window.print();
+            } catch (e) {
+                alert('Unable to open print dialog. You can use your browser\'s File > Print to save as PDF.');
+                console.error(e);
+            }
+        }
+
+        let chatOpen = false;
+        let chatHistory = [
+            { role: 'assistant', content: 'Hi! I can answer questions about this project, its files, and the data in this folder. Ask me anything about the dashboard, calculator, or datasets.' }
+        ];
+
+        function toggleChat(open) {
+            chatOpen = (open === undefined) ? !chatOpen : open;
+            document.getElementById('chatPanel').style.display = chatOpen ? 'flex' : 'none';
+            if (chatOpen) renderChat();
+        }
+
+        function renderChat() {
+            const body = document.getElementById('chatBody');
+            body.innerHTML = '';
+            for (const m of chatHistory) {
+                const row = document.createElement('div');
+                row.className = 'msg ' + (m.role === 'user' ? 'user' : 'assistant');
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.textContent = m.content;
+                row.appendChild(bubble);
+                body.appendChild(row);
+            }
+            body.scrollTop = body.scrollHeight;
+        }
+
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            chatHistory.push({ role: 'user', content: text });
+            input.value = '';
+            renderChat();
+
+            // Show typing placeholder
+            chatHistory.push({ role: 'assistant', content: 'Thinking…' });
+            renderChat();
+
+            try {
+                const res = await fetch('http://localhost:5555/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: chatHistory.filter(m => m.role !== 'assistant' || m.content !== 'Thinking…').slice(-8),
+                        mode: 'full',
+                        max_context_files: 50
+                    })
+                });
+                const data = await res.json();
+                // Replace typing placeholder
+                chatHistory.pop();
+                if (data.success) {
+                    chatHistory.push({ role: 'assistant', content: data.answer });
+                    if (data.sources && data.sources.length) {
+                        chatHistory.push({ role: 'assistant', content: 'Sources:\n' + data.sources.join('\n') });
+                    }
+                } else {
+                    chatHistory.push({ role: 'assistant', content: 'Error: ' + (data.error || 'Unknown error') });
+                }
+            } catch (e) {
+                // Replace typing placeholder
+                chatHistory.pop();
+                chatHistory.push({ role: 'assistant', content: 'Could not reach backend at /api/chat. Ensure the backend is running on port 5555 (launch_calculator.sh) and CORS is enabled.' });
+                console.error(e);
+            } finally {
+                renderChat();
+            }
+        }
+    </script>
+</body>
+</html>

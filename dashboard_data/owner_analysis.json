@@ -1,0 +1,224 @@
+{
+  "owners": [
+    {
+      "owner": "US",
+      "satellite_count": 12084,
+      "avg_total_risk": 57.7,
+      "avg_collision": 53.3,
+      "avg_environment": 65.9,
+      "avg_bors": 55.2,
+      "total_insured_value": 68980347500,
+      "total_annual_premium": 3941832346,
+      "avg_rate_on_line": 5.56
+    },
+    {
+      "owner": "CIS",
+      "satellite_count": 2972,
+      "avg_total_risk": 64.3,
+      "avg_collision": 65.1,
+      "avg_environment": 62.7,
+      "avg_bors": 64.8,
+      "total_insured_value": 62920965000,
+      "total_annual_premium": 4587700926,
+      "avg_rate_on_line": 7.27
+    },
+    {
+      "owner": "PRC",
+      "satellite_count": 1211,
+      "avg_total_risk": 61.9,
+      "avg_collision": 65.0,
+      "avg_environment": 63.7,
+      "avg_bors": 56.1,
+      "total_insured_value": 5796852000,
+      "total_annual_premium": 357057685,
+      "avg_rate_on_line": 6.16
+    },
+    {
+      "owner": "UK",
+      "satellite_count": 708,
+      "avg_total_risk": 56.2,
+      "avg_collision": 53.6,
+      "avg_environment": 58.8,
+      "avg_bors": 57.3,
+      "total_insured_value": 3092854500,
+      "total_annual_premium": 174282657,
+      "avg_rate_on_line": 5.56
+    },
+    {
+      "owner": "JPN",
+      "satellite_count": 184,
+      "avg_total_risk": 62.5,
+      "avg_collision": 60.4,
+      "avg_environment": 63.3,
+      "avg_bors": 64.5,
+      "total_insured_value": 1837054000,
+      "total_annual_premium": 109532083,
+      "avg_rate_on_line": 6.26
+    },
+    {
+      "owner": "GLOB",
+      "satellite_count": 70,
+      "avg_total_risk": 42.6,
+      "avg_collision": 15.0,
+      "avg_environment": 55.2,
+      "avg_bors": 66.8,
+      "total_insured_value": 1188000000,
+      "total_annual_premium": 27621000,
+      "avg_rate_on_line": 2.33
+    },
+    {
+      "owner": "ORB",
+      "satellite_count": 60,
+      "avg_total_risk": 70.3,
+      "avg_collision": 81.4,
+      "avg_environment": 59.2,
+      "avg_bors": 66.6,
+      "total_insured_value": 1054000000,
+      "total_annual_premium": 67053000,
+      "avg_rate_on_line": 7.51
+    },
+    {
+      "owner": "FR",
+      "satellite_count": 116,
+      "avg_total_risk": 65.5,
+      "avg_collision": 71.0,
+      "avg_environment": 62.8,
+      "avg_bors": 60.8,
+      "total_insured_value": 1047438000,
+      "total_annual_premium": 61368346,
+      "avg_rate_on_line": 6.23
+    },
+    {
+      "owner": "GER",
+      "satellite_count": 95,
+      "avg_total_risk": 65.7,
+      "avg_collision": 69.2,
+      "avg_environment": 63.3,
+      "avg_bors": 63.5,
+      "total_insured_value": 752970000,
+      "total_annual_premium": 46562782,
+      "avg_rate_on_line": 6.91
+    },
+    {
+      "owner": "TBD",
+      "satellite_count": 118,
+      "avg_total_risk": 63.3,
+      "avg_collision": 66.8,
+      "avg_environment": 65.5,
+      "avg_bors": 56.5,
+      "total_insured_value": 652000000,
+      "total_annual_premium": 39277000,
+      "avg_rate_on_line": 6.25
+    },
+    {
+      "owner": "IT",
+      "satellite_count": 91,
+      "avg_total_risk": 64.9,
+      "avg_collision": 70.2,
+      "avg_environment": 65.2,
+      "avg_bors": 57.4,
+      "total_insured_value": 618460500,
+      "total_annual_premium": 40180807,
+      "avg_rate_on_line": 6.38
+    },
+    {
+      "owner": "IND",
+      "satellite_count": 73,
+      "avg_total_risk": 63.6,
+      "avg_collision": 64.8,
+      "avg_environment": 63.6,
+      "avg_bors": 62.2,
+      "total_insured_value": 591864500,
+      "total_annual_premium": 38968964,
+      "avg_rate_on_line": 6.47
+    },
+    {
+      "owner": "CA",
+      "satellite_count": 60,
+      "avg_total_risk": 65.1,
+      "avg_collision": 66.2,
+      "avg_environment": 64.0,
+      "avg_bors": 64.6,
+      "total_insured_value": 372854500,
+      "total_annual_premium": 26645828,
+      "avg_rate_on_line": 6.64
+    },
+    {
+      "owner": "SPN",
+      "satellite_count": 65,
+      "avg_total_risk": 63.7,
+      "avg_collision": 65.5,
+      "avg_environment": 66.3,
+      "avg_bors": 58.8,
+      "total_insured_value": 298785500,
+      "total_annual_premium": 21395066,
+      "avg_rate_on_line": 6.76
+    },
+    {
+      "owner": "ESA",
+      "satellite_count": 33,
+      "avg_total_risk": 60.7,
+      "avg_collision": 70.6,
+      "avg_environment": 61.3,
+      "avg_bors": 46.9,
+      "total_insured_value": 294066500,
+      "total_annual_premium": 14465108,
+      "avg_rate_on_line": 5.23
+    },
+    {
+      "owner": "ISRA",
+      "satellite_count": 39,
+      "avg_total_risk": 59.9,
+      "avg_collision": 54.7,
+      "avg_environment": 65.8,
+      "avg_bors": 60.8,
+      "total_insured_value": 264864500,
+      "total_annual_premium": 14465507,
+      "avg_rate_on_line": 5.62
+    },
+    {
+      "owner": "AUS",
+      "satellite_count": 43,
+      "avg_total_risk": 64.1,
+      "avg_collision": 66.5,
+      "avg_environment": 65.7,
+      "avg_bors": 59.3,
+      "total_insured_value": 257450500,
+      "total_annual_premium": 14371289,
+      "avg_rate_on_line": 6.31
+    },
+    {
+      "owner": "ARGN",
+      "satellite_count": 43,
+      "avg_total_risk": 64.2,
+      "avg_collision": 68.5,
+      "avg_environment": 65.7,
+      "avg_bors": 57.1,
+      "total_insured_value": 245266000,
+      "total_annual_premium": 16141110,
+      "avg_rate_on_line": 6.43
+    },
+    {
+      "owner": "SKOR",
+      "satellite_count": 42,
+      "avg_total_risk": 66.3,
+      "avg_collision": 72.6,
+      "avg_environment": 63.6,
+      "avg_bors": 60.4,
+      "total_insured_value": 237059000,
+      "total_annual_premium": 15536604,
+      "avg_rate_on_line": 6.84
+    },
+    {
+      "owner": "SAUD",
+      "satellite_count": 15,
+      "avg_total_risk": 66.9,
+      "avg_collision": 73.5,
+      "avg_environment": 59.2,
+      "avg_bors": 66.0,
+      "total_insured_value": 196000000,
+      "total_annual_premium": 11501000,
+      "avg_rate_on_line": 6.51
+    }
+  ]
+}
